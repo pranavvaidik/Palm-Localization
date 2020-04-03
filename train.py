@@ -57,7 +57,7 @@ out_left = Dense(512, activation = 'relu')(out)
 out_left = Dropout(0.5)(out_left)
 out_left = Dense(256, activation = 'relu')(out_left)
 out_left = Dropout(0.5)(out_left)
-out_left = Dense(10, activation = 'softmax', name = 'left_out')(out_left)
+out_left = Dense(22, activation = 'softmax', name = 'left_out')(out_left)
 
 # block for right hand
 #out_right = Dense(1024, activation = 'relu')(out)
@@ -66,7 +66,7 @@ out_right = Dense(512, activation = 'relu')(out)
 out_right = Dropout(0.5)(out_right)
 out_right = Dense(256, activation = 'relu')(out_right)
 out_right = Dropout(0.5)(out_right)
-out_right = Dense(10, activation = 'softmax', name='right_out')(out_right)
+out_right = Dense(22, activation = 'softmax', name='right_out')(out_right)
 
 # concatenate left and right blocks as outputs for final output
 test_model = keras.Model(inputs = new_model.input, outputs = [out_left,out_right])
