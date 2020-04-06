@@ -78,8 +78,8 @@ for file_name in video_file_names:
 			
 			# check if the relevant folder path exists and create if it doesn't
 			dir_path = {'left':image_folder_path['left']+label_left, 'right':image_folder_path['right']+label_right}
-			dir_path['rev_left'] = image_folder_path['left']+reverse_label_left
-			dir_path['rev_right'] = image_folder_path['right']+reverse_label_right
+			dir_path['rev_left'] = image_folder_path['right']+reverse_label_left
+			dir_path['rev_right'] = image_folder_path['left']+reverse_label_right
 			
 			
 			for key in dir_path.keys():
