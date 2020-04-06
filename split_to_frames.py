@@ -57,25 +57,53 @@ for file_name in video_file_names:
 			label_left = labels_left[frame_number-1]['location']
 			label_right = labels_right[frame_number-1]['location']
 			
+			# Save the flip the frame horozontally and swap labels properly
+			reverse_frame = cv2.flip(frame, 1)
+			
+			if label_left.startswith('left'):
+				reverse_label_right = 'right' + label_left[4:]
+			elif label_left.startswith('right'):
+				reverse_label_right = 'left' + label_left[5:]
+			else:
+				reverse_label_right = label_left
+			
+			
+			if label_right.startswith('left'):
+				reverse_label_left = 'right' + label_right[4:]
+			elif label_right.startswith('right'):
+				reverse_label_left = 'left'+label_right[5:]
+			else:
+				reverse_label_left = label_right
+			
+			
 			# check if the relevant folder path exists and create if it doesn't
 			dir_path = {'left':image_folder_path['left']+label_left, 'right':image_folder_path['right']+label_right}
+			dir_path['rev_left'] = image_folder_path['left']+reverse_label_left
+			dir_path['rev_right'] = image_folder_path['right']+reverse_label_right
 			
-			if not os.path.isdir(dir_path['left']):
-				os.mkdir(dir_path['left'])
 			
-			if not os.path.isdir(dir_path['right']):
-				os.mkdir(dir_path['right'])
+			for key in dir_path.keys():
+				if not os.path.isdir(dir_path[key]):
+					os.mkdir(dir_path[key])
+				
+#				if not os.path.isdir(dir_path['right']):
+#					os.mkdir(dir_path['right'])
 			
 			# create a name for the image file and resize it
 			frame_name = str(frame_number).zfill(6) + '.jpg'
+			reverse_frame_name = 'rev_'+frame_name
 			frame = cv2.resize(frame, (224,224), fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
-
+			reverse_frame = cv2.resize(reverse_frame, (224,224), fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
+			
 			# Save the resulting frame
 			cv2.imwrite(dir_path['left']+'/'+frame_name, frame)
 			cv2.imwrite(dir_path['right']+'/'+frame_name, frame)
-			#print(i_path+frame_name)
-			
-			print(frame_name)
+			cv2.imwrite(dir_path['rev_left']+'/'+reverse_frame_name, reverse_frame)
+			cv2.imwrite(dir_path['rev_right']+'/'+reverse_frame_name, reverse_frame)			
+				
+			# Add verbose
+			if frame_number%500 == 0:
+				print("[INFO] preprocessed ",frame_number," frames so successfully")
 		else:
 		    break
 
