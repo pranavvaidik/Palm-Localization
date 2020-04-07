@@ -61,7 +61,8 @@ for file_name in video_file_names:
 			reverse_frame = cv2.flip(frame, 1)
 			
 			if label_left.startswith('left'):
-				reverse_label_right = 'right' + label_left[4:]
+				if not label_left.endswith('palm'):
+					reverse_label_right = 'right' + label_left[4:]
 			elif label_left.startswith('right'):
 				reverse_label_right = 'left' + label_left[5:]
 			else:
@@ -71,15 +72,16 @@ for file_name in video_file_names:
 			if label_right.startswith('left'):
 				reverse_label_left = 'right' + label_right[4:]
 			elif label_right.startswith('right'):
-				reverse_label_left = 'left'+label_right[5:]
+				if not label_right.endswith('palm'):
+					reverse_label_left = 'left'+label_right[5:]
 			else:
 				reverse_label_left = label_right
 			
 			
 			# check if the relevant folder path exists and create if it doesn't
 			dir_path = {'left':image_folder_path['left']+label_left, 'right':image_folder_path['right']+label_right}
-			dir_path['rev_left'] = image_folder_path['right']+reverse_label_left
-			dir_path['rev_right'] = image_folder_path['left']+reverse_label_right
+			dir_path['rev_left'] = image_folder_path['left']+reverse_label_left
+			dir_path['rev_right'] = image_folder_path['right']+reverse_label_right
 			
 			
 			for key in dir_path.keys():
@@ -90,16 +92,16 @@ for file_name in video_file_names:
 #					os.mkdir(dir_path['right'])
 			
 			# create a name for the image file and resize it
-			frame_name = str(frame_number).zfill(6) + '.jpg'
-			reverse_frame_name = 'rev_'+frame_name
+			frame_name = file_name[:-4] + str(frame_number).zfill(6) + '.jpg'
+			reverse_frame_name = file_name[:-4] + 'rev_' + frame_name
 			frame = cv2.resize(frame, (224,224), fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
 			reverse_frame = cv2.resize(reverse_frame, (224,224), fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
 			
 			# Save the resulting frame
 			cv2.imwrite(dir_path['left']+'/'+frame_name, frame)
 			cv2.imwrite(dir_path['right']+'/'+frame_name, frame)
-			cv2.imwrite(dir_path['rev_left']+'/'+reverse_frame_name, reverse_frame)
-			cv2.imwrite(dir_path['rev_right']+'/'+reverse_frame_name, reverse_frame)			
+			#cv2.imwrite(dir_path['rev_left']+'/'+reverse_frame_name, reverse_frame)
+			#cv2.imwrite(dir_path['rev_right']+'/'+reverse_frame_name, reverse_frame)			
 				
 			# Add verbose
 			if frame_number%500 == 0:
