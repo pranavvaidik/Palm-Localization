@@ -31,6 +31,9 @@ iap = ImageToArrayPreprocessor()
 # load dataset and scale the pixels to range [0,1]
 mdl = MultiOutputDatasetLoader(preprocessors=[sp,iap])
 (data, labels_left, labels_right) = mdl.load(imagePaths_left, imagePaths_right, verbose = 500)
+data = data.astype("float")/255.0
 
+# split data to train, validation and test data with 60% train and 20% validation and 20% test
+(trainX, restX, trainY, restY) = train_test_split(data, )
 
 
