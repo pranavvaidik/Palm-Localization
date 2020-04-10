@@ -23,10 +23,11 @@ class HDF5DatasetGenerator:
 		while epochs < passes:
 			# loop over hdf5 dataset
 			for i in np.arange(0, self.numImages, self.batchSize):
+				print("Hello")
 				# extract images and labels
-				images = self.db["images"][i:i+batchSize]
-				labels_left = self.db["labels_left"][i:i+batchSize]
-				labels_right = self.db["labels_right"][i:i+batchSize]
+				images = self.db["images"][i:i+self.batchSize]
+				labels_left = self.db["labels_left"][i:i+self.batchSize]
+				labels_right = self.db["labels_right"][i:i+self.batchSize]
 				
 				# check if labels should be binarized
 				if self.binarize:
@@ -52,7 +53,7 @@ class HDF5DatasetGenerator:
 				if self.aug is not None:
 					(images, labels_left)	= next(self.aug.flow(images, labels_left, batch_size=self.batchSize))
 					
-				yield (images, {"left":labels_left, "right":labels_right})
+				yield (images, {"left_out":labels_left, "right_out":labels_right})
 				
 			# increment epochs
 			epochs += 1
