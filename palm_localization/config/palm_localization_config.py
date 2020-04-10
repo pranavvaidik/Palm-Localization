@@ -1,5 +1,6 @@
 # define paths to images directory for left hand
-IMAGES_PATH = "../data/left"
+IMAGES_PATH_LEFT = "../data/left"
+IMAGES_PATH_RIGHT = "../data/right"
 
 # Assign a number of test and validation images to measure the metrics
 NUM_CLASSES = 22

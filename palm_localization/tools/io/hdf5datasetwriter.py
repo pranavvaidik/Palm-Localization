@@ -12,18 +12,20 @@ class HDF5DatasetWriter:
 		# one to store images, other for class labels
 		self.db = h5py.File(outPath, "w")
 		self.data = self.db.create_dataset(dataKey, dims, dtype="float")
-		self.labels = self.db.create_dataset("labels",(dims[0],), dtype="int") # change this to two labels in a later format
+		self.labels_left = self.db.create_dataset("labels_left",(dims[0],), dtype="int")
+		self.labels_right = self.db.create_dataset("labels_right",(dims[0],), dtype="int") # change this to two labels in a later format
 		
 		# store the buffer size, then initialize the buffer along with
 		# the index into the datasets
 		self.bufSize = bufSize
-		self.buffer = {"data":[], "labels":[]}
+		self.buffer = {"data":[], "labels_left":[], "labels_right":[]}
 		self.idx = 0
 		
-	def add(self, rows, labels):
+	def add(self, rows, labels_left, labels_right):
 		# add rows and labels to the buffer
 		self.buffer["data"].extend(rows)
-		self.buffer["labels"].extend(labels)
+		self.buffer["labels_left"].extend(labels_left)
+		self.buffer["labels_right"].extend(labels_right)
 		
 		# if buffer is full, flush the rows in buffer to disk
 		if len(self.buffer['data']) >= self.bufSize:
@@ -33,15 +35,23 @@ class HDF5DatasetWriter:
 		# write buffers to disk and reset them
 		i = self.idx + len(self.buffer["data"])
 		self.data[self.idx:i] = self.buffer["data"]
-		self.labels[self.idx:i] = self.buffer["labels"]
+		self.labels_left[self.idx:i] = self.buffer["labels_left"]
+		self.labels_right[self.idx:i] = self.buffer["labels_right"]
 		self.idx = i
-		self.buffer = {"data":[], "labels":[]}
+		self.buffer = {"data":[], "labels_left":[], "labels_right":[]}
 		
-	def storeClassLabels(self, classLabels):
+	def storeClassLabels_left(self, classLabels):
 		# create a dataset to store the actual class label names,
 		# then store the class labels
 		dt = h5py.special_dtype(vlen=unicode)
-		labelSet = self.db.create_dataset("label_names", (len(classLabels),), dtype = dt)
+		labelSet = self.db.create_dataset("label_names_left", (len(classLabels),), dtype = dt)
+		labelSet[:] = classLabels
+		
+	def storeClassLabels_right(self, classLabels):
+		# create a dataset to store the actual class label names,
+		# then store the class labels
+		dt = h5py.special_dtype(vlen=unicode)
+		labelSet = self.db.create_dataset("label_names_right", (len(classLabels),), dtype = dt)
 		labelSet[:] = classLabels
 		
 	def close(self):
