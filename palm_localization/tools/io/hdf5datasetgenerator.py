@@ -14,7 +14,7 @@ class HDF5DatasetGenerator:
 		self.db = h5py.File(dbPath,"r")
 		self.numImages = self.db["labels_left"].shape[0]
 		
-	def generator(self, passes=np.inf)
+	def generator(self, passes=np.inf):
 		#initialize the epoch count
 		epochs = 0
 		
