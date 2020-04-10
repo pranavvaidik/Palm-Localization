@@ -48,10 +48,10 @@ path = os.path.sep.join([ config.OUTPUT_PATH, "{}.png".format( os.getpid() ) ])
 callbacks = [TrainingMonitor(path)]
 
 # train the network
-model.fit_generator(trainGen.generator(passes=10), 
-					steps_per_epoch = trainGen.numImages//8,
-					validation_data = valGen.generator(passes=10), 
-					validation_steps=valGen.numImages//8,
+model.fit_generator(trainGen.generator(), 
+					steps_per_epoch = trainGen.numImages//32,
+					validation_data = valGen.generator(), 
+					validation_steps=valGen.numImages//32,
 					epochs = 3,
 					max_queue_size = 2,
 					callbacks=callbacks,
