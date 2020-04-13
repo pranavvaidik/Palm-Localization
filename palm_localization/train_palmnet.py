@@ -29,8 +29,8 @@ mp = MeanPreprocessor(means["R"], means["G"], means["B"])
 iap = ImageToArrayPreprocessor()
 
 # initialize training and validation dataset generators
-trainGen = HDF5DatasetGenerator(config.TRAIN_HDF5, 8, aug=None, preprocessors=[sp, mp, iap], classes=22)
-valGen = HDF5DatasetGenerator(config.VAL_HDF5, 8, aug=None, preprocessors=[sp, mp, iap], classes=22)
+trainGen = HDF5DatasetGenerator(config.TRAIN_HDF5, config.BATCH_SIZE, aug=aug, preprocessors=[sp, mp, iap], classes=22)
+valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=22)
 
 # initialize the optimizer
 print("[INFO] compiling model...")
@@ -49,12 +49,12 @@ callbacks = [TrainingMonitor(path)]
 
 # train the network
 model.fit_generator(trainGen.generator(), 
-					steps_per_epoch = trainGen.numImages//32,
+					steps_per_epoch = trainGen.numImages//config.BATCH_SIZE,
 					validation_data = valGen.generator(), 
-					validation_steps=valGen.numImages//32,
+					validation_steps=valGen.numImages//config.BATCH_SIZE,
 					epochs = 3,
 					max_queue_size = 2,
-					callbacks=callbacks,
+#					callbacks=callbacks,
 					verbose=1)
 
 # save model to file			

@@ -20,3 +20,6 @@ DATASET_MEAN = "output/palm_locations_mean.json"
 
 # path to output directory for storing plots, classification reports, etc.
 OUTPUT_PATH = "output"
+
+# batch size
+BATCH_SIZE = 128
