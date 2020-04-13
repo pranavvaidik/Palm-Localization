@@ -4,17 +4,17 @@ import os
 import json
 
 # check if the directory for left and right hands already exist
-if not os.path.isdir('data/left'):
-	os.mkdir('data/left')
-if not os.path.isdir('data/right'):
-	os.mkdir('data/right')
+if not os.path.isdir('../data/left'):
+	os.mkdir('../data/left')
+if not os.path.isdir('../data/right'):
+	os.mkdir('../data/right')
 
-video_file_names = [file_name for file_name in os.listdir('data/') if file_name.endswith('.mp4')]
-image_folder_path = {'left' : 'data/left/', 'right' : 'data/right/'}
+video_file_names = [file_name for file_name in os.listdir('../data/') if file_name.endswith('.mp4')]
+image_folder_path = {'left' : '../data/left/', 'right' : '../data/right/'}
 
 
 for file_name in video_file_names:
-	filepath = 'data/'+file_name
+	filepath = '../data/'+file_name
 	json_path = filepath[:-4]+'.json'
 	# check if relevant json file exists
 	try:
@@ -100,8 +100,8 @@ for file_name in video_file_names:
 			# Save the resulting frame
 			cv2.imwrite(dir_path['left']+'/'+frame_name, frame)
 			cv2.imwrite(dir_path['right']+'/'+frame_name, frame)
-			#cv2.imwrite(dir_path['rev_left']+'/'+reverse_frame_name, reverse_frame)
-			#cv2.imwrite(dir_path['rev_right']+'/'+reverse_frame_name, reverse_frame)			
+			cv2.imwrite(dir_path['rev_left']+'/'+reverse_frame_name, reverse_frame)
+			cv2.imwrite(dir_path['rev_right']+'/'+reverse_frame_name, reverse_frame)			
 				
 			# Add verbose
 			if frame_number%500 == 0:
