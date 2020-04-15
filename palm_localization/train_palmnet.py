@@ -48,11 +48,11 @@ path = os.path.sep.join([ config.OUTPUT_PATH, "{}.png".format( os.getpid() ) ])
 callbacks = [TrainingMonitor(path)]
 
 # train the network
-model.fit_generator(trainGen.generator(), 
+H = model.fit_generator(trainGen.generator(), 
 					steps_per_epoch = trainGen.numImages//config.BATCH_SIZE,
 					validation_data = valGen.generator(), 
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
-					epochs = 3,
+					epochs = 100,
 					max_queue_size = 2,
 #					callbacks=callbacks,
 					verbose=1)
@@ -60,6 +60,10 @@ model.fit_generator(trainGen.generator(),
 # save model to file			
 print("[INFO] saving the model...")
 model.save(config.MODEL_PATH, overwrite = True)
+
+import pickle
+with fp = open(config.OUTPUT_PATH + "/history.pkl","wb"):
+	picke.dump(H.history, fp)
 
 # close the HDF5 datasets
 trainGen.close()
