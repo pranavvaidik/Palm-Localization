@@ -23,7 +23,6 @@ class HDF5DatasetGenerator:
 		while epochs < passes:
 			# loop over hdf5 dataset
 			for i in np.arange(0, self.numImages, self.batchSize):
-				print("Hello")
 				# extract images and labels
 				images = self.db["images"][i:i+self.batchSize]
 				labels_left = self.db["labels_left"][i:i+self.batchSize]
@@ -58,6 +57,6 @@ class HDF5DatasetGenerator:
 			# increment epochs
 			epochs += 1
 		
-	def close():
+	def close(self):
 		# close the database
 		self.db.close()
