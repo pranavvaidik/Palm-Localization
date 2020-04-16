@@ -58,16 +58,14 @@ H = model.fit_generator(trainGen.generator(),
 					steps_per_epoch = trainGen.numImages//config.BATCH_SIZE,
 					validation_data = valGen.generator(), 
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
-					epochs = 30,
+					epochs = 25,
 					max_queue_size = 4,
 #					callbacks=callbacks,
 					verbose=1)
 
 
 # evaluate the model
-test_results = model.evaluate(testGen.generator(),
-				batch_size=config.BATCH_SIZE,
-				verbose = 1)
+test_results = model.evaluate_generator(testGen.generator(),steps = testGen.numImages//config.BATCH_SIZE ,verbose = 1)
 
 print(test_results)
 
