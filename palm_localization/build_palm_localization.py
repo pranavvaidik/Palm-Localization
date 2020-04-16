@@ -13,13 +13,13 @@ import cv2
 import os
 
 # grab the paths to the images
-imagePaths_left = list(paths.list_images('../data/left/'))[:10000]
-imagePaths_right = list(paths.list_images('../data/right/'))[:10000]
+imagePaths_left = list(paths.list_images('../data/left/'))
+imagePaths_right = list(paths.list_images('../data/right/'))
 
 # We only need one of the paths to get all the images
 trainPaths = imagePaths_left
 
-print("serious problem", len(imagePaths_left), len(imagePaths_right))
+#print("serious problem", len(imagePaths_left), len(imagePaths_right))
 
 # get the labels
 mdl = MultiOutputDatasetLoader()
@@ -32,7 +32,7 @@ trainLabels_left = le_left.fit_transform(trainLabels_left)
 trainLabels_right = le_right.fit_transform(trainLabels_right)
 
 
-print ("look here: ", len(imagePaths_left), len(imagePaths_right), len(trainLabels_left), len(trainLabels_right))
+#print ("look here: ", len(imagePaths_left), len(imagePaths_right), len(trainLabels_left), len(trainLabels_right))
 
 # perform sampling from the training set to build validation and test sets
 

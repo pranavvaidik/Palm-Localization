@@ -52,7 +52,7 @@ H = model.fit_generator(trainGen.generator(),
 					steps_per_epoch = trainGen.numImages//config.BATCH_SIZE,
 					validation_data = valGen.generator(), 
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
-					epochs = 100,
+					epochs = 20,
 					max_queue_size = 2,
 #					callbacks=callbacks,
 					verbose=1)
@@ -62,8 +62,8 @@ print("[INFO] saving the model...")
 model.save(config.MODEL_PATH, overwrite = True)
 
 import pickle
-with fp = open(config.OUTPUT_PATH + "/history.pkl","wb"):
-	picke.dump(H.history, fp)
+with open(config.OUTPUT_PATH + "/history.pkl","wb") as fp:
+	pickle.dump(H.history, fp)
 
 # close the HDF5 datasets
 trainGen.close()
