@@ -32,6 +32,7 @@ iap = ImageToArrayPreprocessor()
 # initialize training and validation dataset generators
 trainGen = HDF5DatasetGenerator(config.TRAIN_HDF5, config.BATCH_SIZE, aug=aug, preprocessors=[sp, mp, iap], classes=22)
 valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=22)
+testGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=22)
 
 # initialize the optimizer
 print("[INFO] compiling model...")
@@ -57,8 +58,8 @@ H = model.fit_generator(trainGen.generator(),
 					steps_per_epoch = trainGen.numImages//config.BATCH_SIZE,
 					validation_data = valGen.generator(), 
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
-					epochs = 20,
-					max_queue_size = 2,
+					epochs = 30,
+					max_queue_size = 4,
 #					callbacks=callbacks,
 					verbose=1)
 
