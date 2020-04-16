@@ -13,7 +13,7 @@ class VideoPredictor:
 		# loop over each video
 		for video_path in videoPaths:
 			# get file path for JSON laebls for the video
-			json_file_path = video_path[:-4]+'.json'
+			json_file_path = video_path[:-4]+'_predicted.json'
 			
 			json_labels = []
 			
