@@ -62,14 +62,23 @@ H = model.fit_generator(trainGen.generator(),
 #					callbacks=callbacks,
 					verbose=1)
 
+
+# evaluate the model
+test_results = model.evaluate(testGen.generator(),
+				batch_size=config.BATCH_SIZE,
+				verbose = 1)
+
+print(test_results)
+
 # save model to file			
 print("[INFO] saving the model...")
 model.save(config.MODEL_PATH, overwrite = True)
 
 import pickle
 with open(config.OUTPUT_PATH + "/history.pkl","wb") as fp:
-	pickle.dump(H.history, fp)
+	pickle.dump({'history': H.history, 'results': test_results}, fp)
 
 # close the HDF5 datasets
 trainGen.close()
 valGen.close()
+testGen.close()
