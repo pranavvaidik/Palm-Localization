@@ -12,6 +12,7 @@ from tools.io import HDF5DatasetGenerator
 from tools.nn.conv import PalmNet
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.metrics import TruePositives, FalsePositives, TrueNegatives, FalseNegatives, CategoricalAccuracy, Precision, Recall
 import json
 import os
 
@@ -41,7 +42,11 @@ model = PalmNet.build(width=224, classes=22)
 losses = {"left_out":"categorical_crossentropy","right_out":"categorical_crossentropy"}
 lossWeights = {"left_out":1.0,"right_out":1.0}
 
-model.compile(optimizer=opt, loss=losses, loss_weights=lossWeights,metrics=["accuracy"])
+# metrics for analysis
+metrics = [TruePositives(name = 'tp'), FalsePositives(name = 'fp'), TrueNegatives(name = 'tn'), FalseNegatives(name = 'fn'), CategoricalAccuracy(name="categorical_accuracy"), Precision(name='precision'), Recall(name = 'recall')]
+
+# compile the model
+model.compile(optimizer=opt, loss=losses, loss_weights=lossWeights,metrics=metrics)
 
 # construct the set of callbacks
 path = os.path.sep.join([ config.OUTPUT_PATH, "{}.png".format( os.getpid() ) ])
