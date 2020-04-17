@@ -13,6 +13,7 @@ from tools.nn.conv import PalmNet
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import TruePositives, FalsePositives, TrueNegatives, FalseNegatives, CategoricalAccuracy, Precision, Recall
+from tools.datasets import VideoPredictor
 import json
 import os
 
@@ -81,3 +82,12 @@ with open(config.OUTPUT_PATH + "/history.pkl","wb") as fp:
 trainGen.close()
 valGen.close()
 testGen.close()
+
+# evaluate videos
+d = "../data/old data"
+video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
+
+# initialize data processor
+vp = VideoPredictor(model = model, processors=[sp,mp,iap])
+vp.load(video_file_paths)
+
