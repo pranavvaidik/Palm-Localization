@@ -41,8 +41,8 @@ opt = Adam(lr=1e-3)
 model = PalmNet.build(width=224, classes=22)
 
 # losses and weights for both branch outputs of the model
-losses = {"output_1":"categorical_crossentropy","output_2":"categorical_crossentropy"}
-lossWeights = {"output_2":1.0,"output_2":1.0}
+losses = {"left_out":"categorical_crossentropy","right_out":"categorical_crossentropy"}
+lossWeights = {"left_out":1.0,"right_out":1.0}
 
 # metrics for analysis
 metrics = [TruePositives(name = 'tp'), FalsePositives(name = 'fp'), TrueNegatives(name = 'tn'), FalseNegatives(name = 'fn'), CategoricalAccuracy(name="categorical_accuracy"), Precision(name='precision'), Recall(name = 'recall')]
