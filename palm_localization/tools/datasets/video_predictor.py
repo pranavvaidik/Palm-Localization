@@ -51,7 +51,7 @@ class VideoPredictor:
 							frame = p.preprocess(frame)
 					
 					# change data format later
-					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': model.predict(frame)])
+					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': model.predict(frame)})
 					
 				else:
 					with open(json_file_path, 'w') as fp:
