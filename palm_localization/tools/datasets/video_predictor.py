@@ -54,10 +54,10 @@ class VideoPredictor:
 					
 					frame = np.expand_dims(frame, axis=0)
 					# change data format later
-					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': self.model.predict(frame).tolist()})
-                                        if frame_number%50 == 0:
-                                                print(frame_number," frames have been processed")
-	
+					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': [t.tolist() for t in self.model.predict(frame)] })
+					if frame_number%50 == 0:
+						print(frame_number," frames have been processed")
+
 				else:
 					with open(json_file_path, 'w') as fp:
 						json.dump(json_labels, fp)
