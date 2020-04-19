@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import json
 
 class VideoPredictor:
 	def __init__(self, model, preprocessors=None):
@@ -53,11 +54,13 @@ class VideoPredictor:
 					
 					frame = np.expand_dims(frame, axis=0)
 					# change data format later
-					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': self.model.predict(frame)})
-					
+					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': self.model.predict(frame).tolist()})
+                                        if frame_number%50 == 0:
+                                                print(frame_number," frames have been processed")
+	
 				else:
 					with open(json_file_path, 'w') as fp:
-						json.dump(labels_dict, fp)
+						json.dump(json_labels, fp)
 						
 					break
 			
