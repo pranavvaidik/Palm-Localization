@@ -84,10 +84,10 @@ valGen.close()
 testGen.close()
 
 # evaluate videos
-d = "../data/old data"
-video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
+#d = "../data/old data"
+#video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
 
 # initialize data processor
-vp = VideoPredictor(model = model, preprocessors=[sp,mp,iap])
-vp.load(video_file_paths)
+#vp = VideoPredictor(model = model, preprocessors=[sp,mp,iap])
+#vp.load(video_file_paths)
 
