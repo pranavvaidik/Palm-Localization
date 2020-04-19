@@ -59,7 +59,7 @@ H = model.fit_generator(trainGen.generator(),
 					steps_per_epoch = trainGen.numImages//config.BATCH_SIZE,
 					validation_data = valGen.generator(), 
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
-					epochs = 25,
+					epochs = 1,
 					max_queue_size = 4,
 #					callbacks=callbacks,
 					verbose=1)
@@ -88,6 +88,6 @@ d = "../data/old data"
 video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
 
 # initialize data processor
-vp = VideoPredictor(model = model, processors=[sp,mp,iap])
+vp = VideoPredictor(model = model, preprocessors=[sp,mp,iap])
 vp.load(video_file_paths)
 

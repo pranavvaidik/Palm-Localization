@@ -10,8 +10,9 @@ import progressbar
 import os
 
 # extract videos file paths
-d = "../data/old data"
-video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
+d = "../data/old data/video_0010.mp4"
+#video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
+video_file_paths = [d]
 
 # Load RGB means for traiing set
 means = json.loads(open(config.DATASET_MEAN).read())
@@ -27,6 +28,6 @@ model = load_model(config.MODEL_PATH)
 
 
 # initialize data processor
-vp = VideoPredictor(model = model, processors=[sp,mp,iap])
+vp = VideoPredictor(model = model, preprocessors=[sp,mp,iap])
 vp.load(video_file_paths)
 

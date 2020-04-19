@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 class VideoPredictor:
 	def __init__(self, model, preprocessors=None):
@@ -17,7 +18,7 @@ class VideoPredictor:
 			json_labels = []
 
 			# read video file
-			video = cv2.videoCapture(video_path)
+			video = cv2.VideoCapture(video_path)
 
 			# get video metadata information
 			frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -50,8 +51,9 @@ class VideoPredictor:
 						for p in self.preprocessors:
 							frame = p.preprocess(frame)
 					
+					frame = np.expand_dims(frame, axis=0)
 					# change data format later
-					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': model.predict(frame)})
+					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': self.model.predict(frame)})
 					
 				else:
 					with open(json_file_path, 'w') as fp:
