@@ -32,8 +32,9 @@ le_right = LabelEncoder()
 trainLabels_left = le_left.fit_transform(trainLabels_left)
 trainLabels_right = le_right.fit_transform(trainLabels_right)
 
-with open("output/label_encoders.pkl","wb") as fp:
-	pickle.dumps([le_left, le_right])
+f = open("output/label_encoders.pkl","wb")
+f.write(pickle.dumps([le_left, le_right]))
+f.close()
 
 #print ("look here: ", len(imagePaths_left), len(imagePaths_right), len(trainLabels_left), len(trainLabels_right))
 
