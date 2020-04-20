@@ -65,9 +65,9 @@ class VideoPredictor:
 					left_pred, right_pred = self.model.predict(frame)
 					for i,label in enumerate(classes_left):
 						#print(left_pred)
-						json_labels["left"][label].append([frame_time, left_pred[0][i]])
+						json_labels["left"][label].append([frame_time, float(left_pred[0][i])])
 					for i,label in enumerate(classes_right):
-						json_labels["right"][label].append([frame_time, right_pred[0][i]])
+						json_labels["right"][label].append([frame_time, float(right_pred[0][i]) ] )
 							
 					#json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': [t.tolist() for t in ] })
 					if frame_number%50 == 0:
