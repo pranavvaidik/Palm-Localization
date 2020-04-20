@@ -20,43 +20,79 @@ ap.add_argument("-v","--video",required=True, help="path to input video")
 args = vars(ap.parse_args())
 
 video_path = args["video"]
-
-# Load RGB means for traiing set
-means = json.loads(open(config.DATASET_MEAN).read())
-
-# load labele for both hands
-f = open(config.OUTPUT_PATH+"/label_encoders.pkl","rb")
-classes_left, classes_right = pickle.loads(f.read())
-f.close()
-
-
-# initialize preprocessors
-sp = SimplePreprocessor(224,224)
-mp = MeanPreprocessor(means["R"], means["G"], means["B"])
-iap = ImageToArrayPreprocessor()
-
-# load the pretrained network
-print("[INFO] loading model...")
-model = load_model(config.MODEL_PATH)
-
-
-# initialize data processor
-vp = VideoPredictor(model = model,  classes=(classes_left,classes_right),preprocessors=[sp,mp,iap])
-print("Started evaluating videos")
-vp.load([video_path])
-
-
-# ask if the user wants to see the video
+json_path = video_path[:-4]+'_predicted.json'
+# check if json file exists for the video
 while True:
 	try:
-		play_video_flag = {"yes":True, "no":False}[input("The video has finished annotation. Do you wish to see the annotated video? (yes/no)").lower()]
+		json_flag = {"yes":True, "no":False}[input("Does a JSON file with labels exists in the directory with the same name? (yes/no)").lower()]
 		break
 	except KeyError:
 		print("Invalid input. Please enter yes or no")
 
+if json_flag:
+	play_video_flag = True
+
+else:
+	# check if the user wants to use a custom JSON file path as labels
+	while True:
+		try:
+			custom_path_flag = {"yes":True, "no":False}[input("Do you want to add a custom path for the JSON labels? (yes/no)").lower()]
+			break
+		except KeyError:
+			print("Invalid input. Please enter yes or no")
+	
+	# accept user input for file path
+	if custom_path_flag:
+		# make sure that the file exists
+		while True:
+			json_path = input("Enter path to JSON file path")
+			if os.path.isfile(json_path):
+				if json_path.endswith(".json"):
+					play_video_flag = True
+					break
+				else:
+					print("Invalid file type. Only JSON files are accepted")
+				
+			else:
+				print("Invalid path. No JSON file exists in the path")
+			
+	else:	
+		# Load RGB means for traiing set
+		means = json.loads(open(config.DATASET_MEAN).read())
+
+		# load labele for both hands
+		f = open(config.OUTPUT_PATH+"/label_encoders.pkl","rb")
+		classes_left, classes_right = pickle.loads(f.read())
+		f.close()
+
+
+		# initialize preprocessors
+		sp = SimplePreprocessor(224,224)
+		mp = MeanPreprocessor(means["R"], means["G"], means["B"])
+		iap = ImageToArrayPreprocessor()
+
+		# load the pretrained network
+		print("[INFO] loading model...")
+		model = load_model(config.MODEL_PATH)
+
+
+		# initialize data processor
+		vp = VideoPredictor(model = model,  classes=(classes_left,classes_right),preprocessors=[sp,mp,iap])
+		print("Started evaluating videos")
+		vp.load([video_path])
+
+
+		# ask if the user wants to see the video
+		while True:
+			try:
+				play_video_flag = {"yes":True, "no":False}[input("The video has finished annotation. Do you wish to see the annotated video? (yes/no)").lower()]
+				break
+			except KeyError:
+				print("Invalid input. Please enter yes or no")
+
 
 if play_video_flag:
-	json_path = video_path[:-4]+'_predicted.json'
+	
 	json_labels = json.loads(open(json_path).read())
 	
 	video = cv2.VideoCapture(video_path)
@@ -76,9 +112,9 @@ if play_video_flag:
 			prob_left = {}
 			prob_right = {}
 			for key in json_labels["left"].keys():
-				prob_left[key] = json_labels["left"][key].pop(0)
+				prob_left[key] = json_labels["left"][key].pop(0)[1]
 			for key in json_labels["right"].keys():
-				prob_right[key] = json_labels["right"][key].pop(0)
+				prob_right[key] = json_labels["right"][key].pop(0)[1]
 			
 			left_label = max(prob_left, key = prob_left.get)
 			right_label = max(prob_right, key = prob_right.get)
