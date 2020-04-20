@@ -4,6 +4,7 @@ import sklearn
 from sklearn.preprocessing import LabelEncoder
 from tools.preprocessing import ImageToArrayPreprocessor, SimplePreprocessor,MeanPreprocessor
 from tensorflow.keras.models import load_model
+from matplotlib import pyplot as plt
 import json
 import numpy as np
 import progressbar
@@ -19,6 +20,7 @@ args = vars(ap.parse_args())
 
 imagePath = args["image"]
 image = cv2.imread(imagePath)
+out_image = image.copy()
 
 # Load RGB means for traiing set
 means = json.loads(open(config.DATASET_MEAN).read())
@@ -51,5 +53,9 @@ left_output, right_output = model.predict(tensor)
 
 print(left_output, class_left[np.argmax(left_output)])
 print(right_output,class_right[np.argmax(right_output)])
+
+cv2.putText(out_image,"left:" + class_left[np.argmax(left_output)] +"; right:"+class_right[np.argmax(right_output)], (10,25),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,255,0),2)
+cv2.imshow("Sample Output",out_image)
+cv2.waitKey(0)
 
 
