@@ -1,5 +1,7 @@
 # import packages
 from config import palm_localization_config as config
+import sklearn
+from sklearn.preprocessing import LabelEncoder
 from tools.preprocessing import ImageToArrayPreprocessor, SimplePreprocessor,MeanPreprocessor
 from tensorflow.keras.models import load_model
 import json
@@ -23,7 +25,7 @@ means = json.loads(open(config.DATASET_MEAN).read())
 
 # load label encoders
 f = open(config.OUTPUT_PATH+"/label_encoders.pkl","rb")
-le_left_, le_right_ = pickle.loads(f.read())
+class_left, class_right_ = pickle.loads(f.read())
 f.close()
 
 
@@ -47,7 +49,7 @@ left_output, right_output = model.predict(tensor)
 
 
 
-print(left_output, le_left.classes_(argmax(left_output)))
-print(rightt_output, le_right.classes_(argmax(right_output)))
+print(left_output, class_left[argmax(left_output)])
+print(right_output,class_right[argmax(right_output)])
 
 
