@@ -52,7 +52,8 @@ class HDF5DatasetGenerator:
 				if self.aug is not None:
 					(images, labels_left)	= next(self.aug.flow(images, labels_left, batch_size=self.batchSize))
 					
-				yield (images, {"left_out":labels_left, "right_out":labels_right})
+				#yield (images, {"left_out":labels_left, "right_out":labels_right})
+				yield (images, [labels_left, labels_right])
 				
 			# increment epochs
 			epochs += 1
