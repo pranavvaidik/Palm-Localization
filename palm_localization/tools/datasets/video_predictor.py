@@ -72,6 +72,8 @@ class VideoPredictor:
 					#json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': [t.tolist() for t in ] })
 					if frame_number%50 == 0:
 						print(frame_number," frames have been processed")
+						print(json_labels['right'])
+						print(json_labels['left'])
 
 				else:
 					with open(json_file_path, 'w') as fp:
