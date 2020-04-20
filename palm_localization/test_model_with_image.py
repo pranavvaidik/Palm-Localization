@@ -25,9 +25,9 @@ out_image = image.copy()
 # Load RGB means for traiing set
 means = json.loads(open(config.DATASET_MEAN).read())
 
-# load label encoders
+# load labele for both hands
 f = open(config.OUTPUT_PATH+"/label_encoders.pkl","rb")
-class_left, class_right = pickle.loads(f.read())
+classes_left, classes_right = pickle.loads(f.read())
 f.close()
 
 
@@ -51,10 +51,13 @@ left_output, right_output = model.predict(tensor)
 
 
 
-print(left_output, class_left[np.argmax(left_output)])
-print(right_output,class_right[np.argmax(right_output)])
+#print(left_output, classes_left[np.argmax(left_output)])
+#print(right_output,classes_right[np.argmax(right_output)])
 
-cv2.putText(out_image,"left:" + class_left[np.argmax(left_output)] +"; right:"+class_right[np.argmax(right_output)], (10,25),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,255,0),2)
+# show labels on image
+print("press any key to exit")
+cv2.putText(out_image,"left:" + classes_left[np.argmax(left_output)] + "("+ str(np.round(np.max(left_output),2)) +")", (10,25),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,255,0),2)
+cv2.putText(out_image,"right:"+classes_right[np.argmax(right_output)] + "("+ str(np.round(np.max(right_output),2)) +")", (10,55),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,255,0),2)
 cv2.imshow("Sample Output",out_image)
 cv2.waitKey(0)
 

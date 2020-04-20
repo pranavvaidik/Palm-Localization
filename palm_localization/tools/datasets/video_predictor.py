@@ -3,20 +3,28 @@ import numpy as np
 import json
 
 class VideoPredictor:
-	def __init__(self, model, preprocessors=None):
+	def __init__(self, model, classes,preprocessors=None):
 		self.model = model
 		self.preprocessors = preprocessors
+		self.classes = classes
 
 		if self.preprocessors is None:
 			self.preprocessors = []
 			
-	def load(self, videoPaths):	
+	def load(self, videoPaths):
+		(classes_left,classes_right) = self.classes
 		# loop over each video
 		for video_path in videoPaths:
 			# get file path for JSON laebls for the video
 			json_file_path = video_path[:-4]+'_predicted.json'
 
-			json_labels = []
+			# initialize the labels in the required json format
+			json_labels = {"left":{},"right":{}}
+			for label in classes_left:
+				json_labels["left"][label] = []
+			for label in classes_right:
+				json_labels["right"][label] = []
+			
 
 			# read video file
 			video = cv2.VideoCapture(video_path)
@@ -54,7 +62,14 @@ class VideoPredictor:
 					
 					frame = np.expand_dims(frame, axis=0)
 					# change data format later
-					json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': [t.tolist() for t in self.model.predict(frame)] })
+					left_pred, right_pred = self.model.predict(frame)
+					for i,label in enumerate(classes_left):
+						#print(left_pred)
+						json_labels["left"][label].append([frame_time, left_pred[0][i]])
+					for i,label in enumerate(classes_right):
+						json_labels["right"][label].append([frame_time, right_pred[0][i]])
+							
+					#json_labels.append({'frame_number':frame_number, 'time':frame_time,'predictions': [t.tolist() for t in ] })
 					if frame_number%50 == 0:
 						print(frame_number," frames have been processed")
 
