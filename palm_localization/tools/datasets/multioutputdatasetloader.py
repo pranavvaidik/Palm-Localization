@@ -22,7 +22,7 @@ class MultiOutputDatasetLoader:
 			image_name = imagePath_left.split(os.path.sep)[-1]
 
 			# get the image path for right hand
-			imagePath_right = [path for path in imagePaths_right if imagePath_left.split(os.path.sep)[-1] == image_name][0]
+			imagePath_right = [path for path in imagePaths_right if path.split(os.path.sep)[-1] == image_name][0]
 			
 			# get the label from the directory names
 			label_left = imagePath_left.split(os.path.sep)[-2]
@@ -52,6 +52,8 @@ class MultiOutputDatasetLoader:
 				# represented in the list
 				for p in self.preprocessors:
 					image = p.preprocess(image)
+					
+				image = image/255.0
 
 			# append image and labels to the list of features and labels        
 			data.append(image)
