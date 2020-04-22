@@ -1,3 +1,4 @@
 from .simpledatasetloader import SimpleDatasetLoader
 from .multioutputdatasetloader import MultiOutputDatasetLoader
 from .video_predictor import VideoPredictor
+from .duplicate_detector import DuplicateDetector
