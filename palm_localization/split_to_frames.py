@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import json
+from tools.datasets import DuplicateDetector
 
 # check if the directory for left and right hands already exist
 if not os.path.isdir('../data/left'):
@@ -12,6 +13,8 @@ if not os.path.isdir('../data/right'):
 video_file_names = [file_name for file_name in os.listdir('../data/') if file_name.endswith('.mp4')]
 image_folder_path = {'left' : '../data/left/', 'right' : '../data/right/'}
 
+# initialize duplicate image detector
+dd = DuplicateDetector()
 
 for file_name in video_file_names:
 	filepath = '../data/'+file_name
@@ -53,6 +56,13 @@ for file_name in video_file_names:
 		frame_number += 1
 		
 		if ret == True: 
+			
+			# Check for duplicates here
+			# call a dhash function that will return a bool if a duplicate appears
+			# should take a dictoinary of 
+			if dd.check_duplicate(frame):
+				continue
+			
 			# get the left and right labels
 			label_left = labels_left[frame_number-1]['location']
 			label_right = labels_right[frame_number-1]['location']
