@@ -118,7 +118,9 @@ if play_video_flag:
 			
 			left_label = max(prob_left, key = prob_left.get)
 			right_label = max(prob_right, key = prob_right.get)
-
+			
+			frame = cv2.resize(frame, (512,512))
+			
 			# draw text on frame
 			cv2.putText(frame,"left:" + left_label + "("+ str(np.round(prob_left[left_label],2)) +")", (10,25),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,255,0),2)
 			cv2.putText(frame,"right:"+ right_label + "("+ str(np.round(prob_right[right_label],2)) +")", (10,55),cv2.FONT_HERSHEY_SIMPLEX, 1,(0,255,0),2)
