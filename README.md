@@ -9,8 +9,10 @@ The model was developed in tensorflow 2.0  in python 3 environment. The model is
 
 ## Installation
 You only need to clone the repository and install the requirements in order to use the model. However, large memory might be required if the video sizes are large (>5000 frames).
+
+Before running the codes in the project, consider installing the dependencies from the requirements.txt file usinf the following command in a virtual environment
 ```
-install using requirements.txt
+pip install -r requirements.txt
 ```
 
 ## How to Use
