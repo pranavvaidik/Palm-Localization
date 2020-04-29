@@ -3,7 +3,7 @@ IMAGES_PATH_LEFT = "../data/left"
 IMAGES_PATH_RIGHT = "../data/right"
 
 # Assign a number of test and validation images to measure the metrics
-NUM_CLASSES = 22
+NUM_CLASSES = 10
 NUM_VAL_IMAGES = 1250*NUM_CLASSES # change this later
 NUM_TEST_IMAGES = 1250*NUM_CLASSES # change this later
 
@@ -22,4 +22,4 @@ DATASET_MEAN = "output/palm_locations_mean.json"
 OUTPUT_PATH = "output"
 
 # batch size
-BATCH_SIZE = 128
+BATCH_SIZE = 16

@@ -31,14 +31,14 @@ mp = MeanPreprocessor(means["R"], means["G"], means["B"])
 iap = ImageToArrayPreprocessor()
 
 # initialize training and validation dataset generators
-trainGen = HDF5DatasetGenerator(config.TRAIN_HDF5, config.BATCH_SIZE, aug=aug, preprocessors=[sp, mp, iap], classes=22)
-valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=22)
-testGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=22)
+trainGen = HDF5DatasetGenerator(config.TRAIN_HDF5, config.BATCH_SIZE, aug=aug, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
+valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
+testGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
 
 # initialize the optimizer
 print("[INFO] compiling model...")
 opt = Adam(lr=1e-3)
-model = PalmNet.build(width=224, classes=22)
+model = PalmNet.build(width=224, classes=10)
 
 # losses and weights for both branch outputs of the model
 losses = {"left_out":"categorical_crossentropy","right_out":"categorical_crossentropy"}
