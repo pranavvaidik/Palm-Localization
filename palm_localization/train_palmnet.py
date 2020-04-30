@@ -44,6 +44,11 @@ model = PalmNet.build(width=224, classes=10)
 losses = {"left_out":"categorical_crossentropy","right_out":"categorical_crossentropy"}
 lossWeights = {"left_out":1.0,"right_out":1.0}
 
+# load class weights
+f = open(config.OUTPUT_PATH+"/class_weights.pkl","wb")
+weights_left, weights_right = pickle.loads(f.read())
+f.close()
+
 # metrics for analysis
 metrics = [TruePositives(name = 'tp'), FalsePositives(name = 'fp'), TrueNegatives(name = 'tn'), FalseNegatives(name = 'fn'), CategoricalAccuracy(name="categorical_accuracy"), Precision(name='precision'), Recall(name = 'recall')]
 
@@ -61,6 +66,7 @@ H = model.fit_generator(trainGen.generator(),
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
 					epochs = 300,
 					max_queue_size = 4,
+					class_weight = [weights_left, weights_right]
 #					callbacks=callbacks,
 					verbose=1)
 
@@ -71,7 +77,7 @@ test_results = model.evaluate_generator(testGen.generator(),steps = testGen.numI
 print(test_results)
 
 # save model to file			
-print("[INFO] saving the model...")
+print("[INFO] saving the model...")       
 model.save(config.MODEL_PATH, overwrite = True)
 
 import pickle
