@@ -44,8 +44,8 @@ f.close()
 
 (trainPaths, valPaths, trainLabels_left, valLabels_left, trainLabels_right, valLabels_right) = train_test_split(trainPaths, trainLabels_left, trainLabels_right, test_size = 0.2, random_state=42)
 
-left_weights = {x: (len(le_left.classes_ * len(trainLabels_left)))/list(trainLabels_left).count(x) for x in set(trainLabels_left)}
-right_weights = {x: (len(le_right.classes_ * len(trainLabels_right)))/list(trainLabels_right).count(x) for x in set(trainLabels_right)}
+left_weights = {x: (len(le_left.classes_) * len(trainLabels_left))/list(trainLabels_left).count(x) for x in set(trainLabels_left)}
+right_weights = {x: (len(le_right.classes_) * len(trainLabels_right))/list(trainLabels_right).count(x) for x in set(trainLabels_right)}
 
 # save class weights
 f = open(config.OUTPUT_PATH+"/class_weights.pkl","wb")

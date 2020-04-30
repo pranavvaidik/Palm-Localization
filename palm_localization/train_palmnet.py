@@ -16,6 +16,7 @@ from tensorflow.keras.metrics import TruePositives, FalsePositives, TrueNegative
 from tools.datasets import VideoPredictor
 import json
 import os
+import pickle
 
 # construct training image generator for data augmentation
 aug = ImageDataGenerator(rotation_range = 20, zoom_range = 0.15, width_shift_range = 0.1,
@@ -45,7 +46,7 @@ losses = {"left_out":"categorical_crossentropy","right_out":"categorical_crossen
 lossWeights = {"left_out":1.0,"right_out":1.0}
 
 # load class weights
-f = open(config.OUTPUT_PATH+"/class_weights.pkl","wb")
+f = open(config.OUTPUT_PATH+"/class_weights.pkl","rb")
 weights_left, weights_right = pickle.loads(f.read())
 f.close()
 
@@ -66,7 +67,7 @@ H = model.fit_generator(trainGen.generator(),
 					validation_steps=valGen.numImages//config.BATCH_SIZE,
 					epochs = 300,
 					max_queue_size = 4,
-					class_weight = [weights_left, weights_right]
+					class_weight = [weights_left, weights_right],
 #					callbacks=callbacks,
 					verbose=1)
 
