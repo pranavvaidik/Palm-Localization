@@ -22,7 +22,7 @@ model.load_weights(weights_path)
 model.summary()
 
 # load and show the image
-path = 'sample_images/ski_224.jpg'
+path = 'sample_images/test2.jpg'
 oriImg = cv2.imread(path) # B,G,R order
 plt.imshow(oriImg[:,:,[2,1,0]])
 plt.show()

@@ -20,4 +20,13 @@ right_hist = [len(list(paths.list_images(DATA_PATH_RIGHT+label))) for label in l
 fig = plt.figure()
 #ax = fig.add_axes([0,0,1,1])
 plt.bar(labels_left,left_hist)
+plt.title('Left')
+
+fig = plt.figure()
+#ax = fig.add_axes([0,0,1,1])
+plt.bar(labels_right,right_hist)
+plt.title('right')
 plt.show()
+
+
+

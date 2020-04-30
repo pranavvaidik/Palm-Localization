@@ -14,8 +14,8 @@ import pickle
 # d = "../data/old data/video_0010.mp4"
 # video_file_paths = [d]
 
-d = "../data/old data"
-video_file_paths = [d+'/'+ filename for filename in os.listdir(d)]
+d = "../data/test data videos"
+video_file_paths = [d+'/'+ filename for filename in os.listdir(d) if filename.endswith('.mp4')]
 
 # Load RGB means for traiing set
 means = json.loads(open(config.DATASET_MEAN).read())
