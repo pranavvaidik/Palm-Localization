@@ -34,7 +34,7 @@ iap = ImageToArrayPreprocessor()
 # initialize training and validation dataset generators
 trainGen = HDF5DatasetGenerator(config.TRAIN_HDF5, config.BATCH_SIZE, aug=aug, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
 valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
-testGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
+#testGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, preprocessors=[sp, mp, iap], classes=config.NUM_CLASSES)
 
 # initialize the optimizer
 print("[INFO] compiling model...")
@@ -73,9 +73,9 @@ H = model.fit_generator(trainGen.generator(),
 
 
 # evaluate the model
-test_results = model.evaluate_generator(testGen.generator(),steps = testGen.numImages//config.BATCH_SIZE ,verbose = 1)
+#test_results = model.evaluate_generator(testGen.generator(),steps = testGen.numImages//config.BATCH_SIZE ,verbose = 1)
 
-print(test_results)
+#print(test_results)
 
 # save model to file			
 print("[INFO] saving the model...")       
@@ -83,12 +83,14 @@ model.save(config.MODEL_PATH, overwrite = True)
 
 import pickle
 with open(config.OUTPUT_PATH + "/history.pkl","wb") as fp:
-	pickle.dump({'history': H.history, 'results': test_results}, fp)
+	#pickle.dump({'history': H.history, 'results': test_results}, fp)
+	pickle.dump({'history': H.history}, fp)
+
 
 # close the HDF5 datasets
 trainGen.close()
 valGen.close()
-testGen.close()
+#testGen.close()
 
 # evaluate videos
 #d = "../data/old data"

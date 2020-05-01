@@ -40,7 +40,7 @@ f.close()
 
 # perform sampling from the training set to build validation and test sets
 
-(trainPaths, testPaths, trainLabels_left, testLabels_left, trainLabels_right, testLabels_right) = train_test_split(trainPaths, trainLabels_left, trainLabels_right, test_size = 0.2, random_state=42)
+#(trainPaths, testPaths, trainLabels_left, testLabels_left, trainLabels_right, testLabels_right) = train_test_split(trainPaths, trainLabels_left, trainLabels_right, test_size = 0.2, random_state=42)
 
 (trainPaths, valPaths, trainLabels_left, valLabels_left, trainLabels_right, valLabels_right) = train_test_split(trainPaths, trainLabels_left, trainLabels_right, test_size = 0.2, random_state=42)
 
@@ -56,8 +56,8 @@ f.close()
 # construct a list pairing the training, validation and  testing image paths
 # along with their corresponding labels and output HDF5 files
 datasets = [("train", trainPaths, trainLabels_left, trainLabels_right, config.TRAIN_HDF5),
-			("val", valPaths, valLabels_left, valLabels_right, config.VAL_HDF5),
-			("test", testPaths, testLabels_left, testLabels_right, config.TEST_HDF5) ]
+			("val", valPaths, valLabels_left, valLabels_right, config.VAL_HDF5)]
+			#("test", testPaths, testLabels_left, testLabels_right, config.TEST_HDF5) ]
 			
 # initialize image preprocessor and list of RGB channel averages
 sp = SimplePreprocessor(224,224)
