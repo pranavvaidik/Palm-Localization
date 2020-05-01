@@ -38,8 +38,8 @@ valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, prep
 
 # initialize the optimizer
 print("[INFO] compiling model...")
-#opt = Adam(lr=1e-3)
-opt = RMSprop()
+opt = Adam(lr=1e-3)
+#opt = RMSprop()
 model = PalmNet.build(width=224, classes=10)
 
 # losses and weights for both branch outputs of the model

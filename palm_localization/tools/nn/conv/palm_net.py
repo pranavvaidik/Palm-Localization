@@ -34,22 +34,23 @@ class PalmNet:
 		out = tf.concat(axis=3, values=[op_out[2], op_out[3]], name='concat_stage2_outs')
 		out = Conv2D(64,kernel_size=(3,3), strides = (2,2),padding='same', activation='relu')(out)
 		out = Conv2D(128,kernel_size=(3,3),padding='same', strides = (2,2), activation='relu')(out)
+		out = Conv2D(128,kernel_size=(3,3),padding='same', strides = (2,2), activation='relu')(out)
 		out = GlobalMaxPool2D()(out)
 		
 		# left hand branch
 		out_left = Dropout(0.5)(out)
 		#out_left = Dense(512, activation = 'relu')(out_left)
 		#out_left = Dropout(0.5)(out_left)
-		#out_left = Dense(256, activation = 'relu')(out_left)
-		#out_left = Dropout(0.5)(out_left)
+		out_left = Dense(256, activation = 'relu')(out_left)
+		out_left = Dropout(0.5)(out_left)
 		out_left = Dense(classes, activation = 'softmax', name = 'left_out')(out_left)
 		
 		# right hand branch
 		out_right = Dropout(0.5)(out)
 		#out_right = Dense(512, activation = 'relu')(out_right)
 		#out_right = Dropout(0.5)(out_right)
-		#out_right = Dense(256, activation = 'relu')(out_right)
-		#out_right = Dropout(0.5)(out_right)
+		out_right = Dense(256, activation = 'relu')(out_right)
+		out_right = Dropout(0.5)(out_right)
 		out_right = Dense(classes, activation = 'softmax', name='right_out')(out_right)
 		
 		
