@@ -11,7 +11,7 @@ from tools.callbacks import TrainingMonitor
 from tools.io import HDF5DatasetGenerator
 from tools.nn.conv import PalmNet
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.metrics import TruePositives, FalsePositives, TrueNegatives, FalseNegatives, CategoricalAccuracy, Precision, Recall
 from tools.datasets import VideoPredictor
 import json
@@ -38,7 +38,8 @@ valGen = HDF5DatasetGenerator(config.VAL_HDF5, config.BATCH_SIZE, aug=None, prep
 
 # initialize the optimizer
 print("[INFO] compiling model...")
-opt = Adam(lr=1e-3)
+#opt = Adam(lr=1e-3)
+opt = RMSprop()
 model = PalmNet.build(width=224, classes=10)
 
 # losses and weights for both branch outputs of the model
