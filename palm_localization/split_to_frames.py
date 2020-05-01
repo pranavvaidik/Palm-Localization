@@ -115,7 +115,7 @@ for file_name in video_file_names:
 				
 			# Add verbose
 			if frame_number%500 == 0:
-				print("[INFO] preprocessed ",frame_number," frames so successfully")
+				print("[INFO] preprocessed ",frame_number," frames successfully")
 		else:
 		    break
 

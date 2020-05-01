@@ -1,16 +1,13 @@
 from config import palm_localization_config as config
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from tools.preprocessing import ImageToArrayPreprocessor, SimplePreprocessor
-from tools.io import HDF5DatasetWriter
 from tools.datasets import MultiOutputDatasetLoader
 from imutils import paths
 import numpy as np
-import progressbar
 import json
 import cv2
 import os
 import pickle
+
+image_folder_path = {'left' : '../data/left/', 'right' : '../data/right/'}
 
 # grab the paths to the images
 imagePaths_left = list(paths.list_images('../data/left/'))
@@ -22,19 +19,51 @@ labels_right = []
 # loop over all image paths
 print(len(imagePaths_right), len(imagePaths_left))
 
-for i, imagePath_right in enumerate(imagePaths_right):
-	# get the image name
-	image_name = imagePath_right.split(os.path.sep)[-1]
+mdl = MultiOutputDatasetLoader()
+trainLabels_left, trainLabels_right = mdl.getAllLabels(imagePaths_left, imagePaths_right)
 
-	# get the image path for right hand
-	imagePath_left = [path for path in imagePaths_left if path.split(os.path.sep)[-1] == image_name]
+for i, imagepath in enumerate(imagePaths_left):
 	
-	if len(imagePath_left) == 0:
-		print ("check this path: ", imagePath_right)
-	elif len(imagePath_left)>1:
-		print("duplicates exist")
-		print("original file is:", imagePath_right)
-		print("duplicates on right:", imagePath_left)
+	# get image name and build a name for the flipped image
+	image_name = imagepath.split(os.path.sep)[-1]
+	reverse_image_name = 'rev'+image_name
 	
-
-
+	# load and flip image horizontally
+	image = cv2.imread(imagepath)
+	rev_image = cv2.flip(image, 1)
+	
+	# get new labels
+	label_left = trainLabels_left[i]
+	label_right = trainLabels_right[i]
+	
+	if label_left.startswith('left'):
+		reverse_label_right = 'right' + label_left[4:]
+	elif label_left.startswith('right'):
+		reverse_label_right = 'left' + label_left[5:]
+	else:
+		reverse_label_right = label_left
+	
+	
+	if label_right.startswith('left'):
+		reverse_label_left = 'right' + label_right[4:]
+	elif label_right.startswith('right'):
+		reverse_label_left = 'left'+label_right[5:]
+	else:
+		reverse_label_left = label_right
+	
+	
+	
+	# check if the relevant folder path exists and create if it doesn't
+	dir_path = {}
+	dir_path['left'] = image_folder_path['left']+reverse_label_left
+	dir_path['right'] = image_folder_path['right']+reverse_label_right
+	
+	cv2.imwrite(dir_path['left']+'/'+reverse_image_name, rev_image)
+	cv2.imwrite(dir_path['right']+'/'+reverse_image_name, rev_image)
+	
+	
+	if i%50 == 0:
+		print("[INFO] processed ",i," images successfully")
+	#cv2.imshow('test',image)
+	#cv2.waitKey(6)
+	
