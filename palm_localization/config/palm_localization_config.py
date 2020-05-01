@@ -22,4 +22,4 @@ DATASET_MEAN = "output/palm_locations_mean.json"
 OUTPUT_PATH = "output"
 
 # batch size
-BATCH_SIZE = 32
+BATCH_SIZE = 64
