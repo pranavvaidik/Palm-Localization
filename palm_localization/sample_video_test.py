@@ -29,9 +29,15 @@ while True:
 	except KeyError:
 		print("Invalid input. Please enter yes or no")
 
+
+# load labele for both hands
+f = open(config.OUTPUT_PATH+"/label_encoders.pkl","rb")
+classes_left, classes_right = pickle.loads(f.read())
+f.close()
+
+
 if json_flag:
 	play_video_flag = True
-
 else:
 	# check if the user wants to use a custom JSON file path as labels
 	while True:
@@ -60,10 +66,7 @@ else:
 		# Load RGB means for traiing set
 		means = json.loads(open(config.DATASET_MEAN).read())
 
-		# load labele for both hands
-		f = open(config.OUTPUT_PATH+"/label_encoders.pkl","rb")
-		classes_left, classes_right = pickle.loads(f.read())
-		f.close()
+		
 
 
 		# initialize preprocessors
@@ -91,6 +94,12 @@ else:
 				print("Invalid input. Please enter yes or no")
 
 
+time_array = []
+left_label_array = []
+right_label_array = []
+classes_left = list(classes_left) 
+classes_right = list(classes_right)
+
 if play_video_flag:
 	
 	json_labels = json.loads(open(json_path).read())
@@ -112,12 +121,18 @@ if play_video_flag:
 			prob_left = {}
 			prob_right = {}
 			for key in json_labels["left"].keys():
-				prob_left[key] = json_labels["left"][key].pop(0)[1]
+				time, prob_left[key] = json_labels["left"][key].pop(0)
 			for key in json_labels["right"].keys():
 				prob_right[key] = json_labels["right"][key].pop(0)[1]
 			
 			left_label = max(prob_left, key = prob_left.get)
 			right_label = max(prob_right, key = prob_right.get)
+			
+			time_array.append(time)
+			left_label_array.append(left_label)
+			right_label_array.append(right_label)
+			#left_label_array.append(classes_left.index(left_label))
+			#right_label_array.append(classes_right.index(right_label))
 			
 			frame = cv2.resize(frame, (512,512))
 			
@@ -132,5 +147,29 @@ if play_video_flag:
 			cv2.destroyAllWindows()
 			break
 
+# plot the labels according to time
+
+#manager = plt.get_current_fig_manager()
+#manager.frame.Maximize(True)
+
+fig, a = plt.subplots(2,1)
+
+
+a[0].plot(time_array,left_label_array)
+a[0].set_title("Left Hand")
+#a[0].set_xlabel("Time")
+
+a[1].plot(time_array,right_label_array)
+a[1].set_title("Right Hand")
+a[1].set_xlabel("Time")
+
+fig.set_size_inches(32,16)
+
+plt.savefig(video_path[:-4]+"_Part 8.png",dpi=300,bbox_inches = "tight")
+plt.show()
+
+
+
+# Add labels on y-axis
 
 
